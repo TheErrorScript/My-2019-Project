@@ -28,6 +28,38 @@ class Player {
    }
    
    
+   void collideWithBarrier(float VELX, float VELY) {
+      for (int i = 0; i < barriers.size(); i++) {
+         if (x > barriers.get(i).x - w && x < barriers.get(i).x + barriers.get(i).w && y > barriers.get(i).y - h && y < barriers.get(i).y + barriers.get(i).h) {
+            if (VELX > 0) {
+               x = barriers.get(i).x - w;
+               velX = 0;
+            }
+            
+            
+            if (VELX < 0) {
+               x = barriers.get(i).x + barriers.get(i).w;
+               velX = 0;
+            }
+            
+            
+            if (VELY > 0) {
+               y = barriers.get(i).y - h;
+               velY = 0;
+            }
+            
+            
+            if (VELY < 0) {
+               y = barriers.get(i).y + barriers.get(i).h;
+               velY = 0;
+            }
+            
+            
+         }
+      }
+   };
+   
+   
    void update() {
       //updates the player's rotation based on the mouse coords
       rotation = atan2(y + (h/2) - aMouseY, x + (w/2) - aMouseX);
@@ -64,8 +96,10 @@ class Player {
       //moving
       //y direction
       y += velY;
+      collideWithBarrier(0, velY);
       //x direction
       x += velX;
+      collideWithBarrier(velX, 0);
       
       
    };
