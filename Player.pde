@@ -46,13 +46,13 @@ class Player {
       } else
       //d goes to the right
       if (keys[3]) {
-         velX = -cos(rotation + (PI/2))*5;
-         velY = -sin(rotation + (PI/2))*5;
+         velX = -cos(rotation + (PI/2))*4;
+         velY = -sin(rotation + (PI/2))*4;
       } else
       //a goes to the left
       if (keys[1]) {
-         velX = cos(rotation + (PI/2))*5;
-         velY = sin(rotation + (PI/2))*5;
+         velX = cos(rotation + (PI/2))*4;
+         velY = sin(rotation + (PI/2))*4;
       } else
       //if no keys are being pressed then stop
       {
@@ -105,4 +105,4 @@ class Player {
    };
    
    
-};
+}

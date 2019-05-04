@@ -3,9 +3,18 @@
 //developer mode
 boolean devMode = true;
 
+float fps = 0;
+float mils = 0;
+float altMils = 0;
+float frameDif = 0;
+
 
 //the player
 Player p1;
+
+
+//ArrayList to store all the barriers
+ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 
 
 //how far the is translated
@@ -31,6 +40,7 @@ void setup() {
    
    if (devMode) {
       p1 = new Player(0, 0);
+      barriers.add(new Barrier(250, 250, 80, 80));
    }
    
    
@@ -64,10 +74,28 @@ void draw() {
       line(-100, 0, 100, 0);
       line(0, -100, 0, 100);
       
+      
+      //drawing barriers witch are usually invisible
+      for (int i = 0; i < barriers.size(); i++) {
+         noFill();
+         stroke(255, 0, 0);
+         
+         rect(barriers.get(i).x, barriers.get(i).y, barriers.get(i).w, barriers.get(i).h);
+         
+         textAlign(CENTER, CENTER);
+         textSize(10);
+         
+         fill(255, 0, 0);
+         text("Barrier", barriers.get(i).x + (barriers.get(i).w/2), barriers.get(i).y - 15);
+         
+      }
+      
+      //drawing the player
       p1.show();
       
       
-      //the translated mouse coords
+      //the translated mouse
+      noStroke();
       fill(255);
       ellipse(aMouseX, aMouseY, 10, 10);
       
@@ -82,6 +110,17 @@ void draw() {
       text("Developer Mode: " + devMode, 5, 20);
       text("Player Coordinates: X " + floor(p1.x) + ", Y " + floor(p1.y), 5, 40);
       text("Keys Pressed: W " + keys[0] + ", A " + keys[1] + ", S " + keys[2] + ", D " + keys[3], 5, 60);
+      
+      
+      altMils = mils;
+      mils = millis();
+      frameDif = mils - altMils;
+      
+      if (frameCount%10 == 0) {
+         fps = floor(1/(frameDif/1000.0));
+      }
+      
+      text("FPS: " + fps, 5, 80);
       
    }
    
