@@ -28,6 +28,7 @@ class Player {
    }
    
    
+   //collision with barriers
    void collideWithBarrier(float VELX, float VELY) {
       for (int i = 0; i < barriers.size(); i++) {
          if (x > barriers.get(i).x - w && x < barriers.get(i).x + barriers.get(i).w && y > barriers.get(i).y - h && y < barriers.get(i).y + barriers.get(i).h) {
@@ -54,6 +55,34 @@ class Player {
                velY = 0;
             }
             
+            
+         }
+      }
+   };
+   
+   
+   //collision with containers
+   void collideWithContainer(float VELX, float VELY) {
+      for (int i = 0; i < containers.size(); i++) {
+         if (x > containers.get(i).x - w && x < containers.get(i).x + containers.get(i).w && y > containers.get(i).y - h && y < containers.get(i).y + containers.get(i).h) {
+            if (VELX > 0) {
+               x = containers.get(i).x - w;
+               containers.get(i).velX = floor(velX);
+            } else
+            if (VELX < 0) {
+               x = containers.get(i).x + containers.get(i).w;
+               containers.get(i).velX = ceil(velX);
+            }
+            
+            
+            if (VELY > 0) {
+               y = containers.get(i).y - h;
+               containers.get(i).velY = floor(velY);
+            } else
+            if (VELY < 0) {
+               y = containers.get(i).y + containers.get(i).h;
+               containers.get(i).velY = ceil(velY);
+            }
             
          }
       }
@@ -97,8 +126,10 @@ class Player {
       //y direction
       y += velY;
       collideWithBarrier(0, velY);
+      collideWithContainer(0, velY);
       //x direction
       x += velX;
+      collideWithContainer(velX, 0);
       collideWithBarrier(velX, 0);
       
       
@@ -134,8 +165,8 @@ class Player {
    
    //update and displays the player
    void show() {
-      this.update();
-      this.display();
+      update();
+      display();
    };
    
    

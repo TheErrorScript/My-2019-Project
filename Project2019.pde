@@ -16,6 +16,9 @@ Player p1;
 //ArrayList to store all the barriers
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 
+//ArrayList to store all the containers IRONIC?
+ArrayList<Container> containers = new ArrayList<Container>();
+
 
 //how far the is translated
 //x direction
@@ -41,6 +44,7 @@ void setup() {
    if (devMode) {
       p1 = new Player(0, 0);
       barriers.add(new Barrier(250, 250, 80, 80));
+      containers.add(new Container(0, 500, 250));
    }
    
    
@@ -87,8 +91,14 @@ void draw() {
          
          fill(255, 0, 0);
          text("Barrier", barriers.get(i).x + (barriers.get(i).w/2), barriers.get(i).y - 15);
-         
       }
+      
+      
+      //show the containers
+      for (int i = 0; i < containers.size(); i++) {
+         containers.get(i).show();
+      }
+      
       
       //drawing the player
       p1.show();
@@ -112,6 +122,7 @@ void draw() {
       text("Keys Pressed: W " + keys[0] + ", A " + keys[1] + ", S " + keys[2] + ", D " + keys[3], 5, 60);
       
       
+      //some simple math to detrmine the FPS
       altMils = mils;
       mils = millis();
       frameDif = mils - altMils;
