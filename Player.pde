@@ -21,6 +21,15 @@ class Player {
    float h = 40;
    
    
+   //player's inventory
+   int[][] playerInv = {
+      {0, 0, 0, 0},
+      {0, 0, 0, 0}
+   };
+   //player's hotbar
+   int[] playerHotbar = {0, 0, 0, 0, 0};
+   
+   
    //constructor
    Player(float tempX, float tempY) {
       x = tempX;

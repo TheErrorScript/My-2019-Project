@@ -1,4 +1,10 @@
+/*
+   Things to do:
+      Make some UIs for inventory
+      Get the item things done
 
+
+*/
 
 //developer mode
 boolean devMode = true;
@@ -11,6 +17,9 @@ float frameDif = 0;
 
 //the player
 Player p1;
+
+
+boolean UIOpen = false;
 
 
 //ArrayList to store all the barriers
@@ -32,9 +41,12 @@ float aMouseX = 0;
 //y coord
 float aMouseY = 0;
 
+//mouse item
+int mouseItem = 0;
 
-//keeps track of if W, A, S, or D are being pressed
-boolean[] keys = {false, false, false, false};
+
+//keeps track of if W, A, S, D, or E are being pressed
+boolean[] keys = {false, false, false, false, false};
 
 
 void setup() {
@@ -133,6 +145,18 @@ void draw() {
       
       text("FPS: " + fps, 5, 80);
       
+   }
+   
+   
+   //not dev mode
+   else {
+   
+   
+   }
+   
+   
+   if (UIOpen) {
+   
    }
    
    

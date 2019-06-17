@@ -1,0 +1,41 @@
+"data" : {
+	"player" : {
+		"hitbox" : {
+			"x" : 0,
+			"y" : 0,
+			"w" : 0,
+			"h" : 0
+		},
+		
+		"stats" : {
+			"health" : 100,
+			"hunger" : 100,
+		},
+		
+		"inventory" : {
+			"hotbar" : [0, 0, 0, 0, 0],
+			"backpack" : [
+				[0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0]
+			]
+		}
+		
+	},
+	"chunks" : [
+		{
+			"blocks" : [
+				
+			]
+			"barriers" : [
+				
+			]
+			"containers" : [
+				
+			]
+		}
+		
+		
+		
+	]
+}
