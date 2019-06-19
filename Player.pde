@@ -39,28 +39,28 @@ class Player {
    
    //collision with barriers
    void collideWithBarrier(float VELX, float VELY) {
-      for (int i = 0; i < barriers.size(); i++) {
-         if (x > barriers.get(i).x - w && x < barriers.get(i).x + barriers.get(i).w && y > barriers.get(i).y - h && y < barriers.get(i).y + barriers.get(i).h) {
+      for (int i = 0; i < loadedChunk.barriers.size(); i++) {
+         if (x > loadedChunk.barriers.get(i).x - w && x < loadedChunk.barriers.get(i).x + loadedChunk.barriers.get(i).w && y > loadedChunk.barriers.get(i).y - h && y < loadedChunk.barriers.get(i).y + loadedChunk.barriers.get(i).h) {
             if (VELX > 0) {
-               x = barriers.get(i).x - w;
+               x = loadedChunk.barriers.get(i).x - w;
                velX = 0;
             }
             
             
             if (VELX < 0) {
-               x = barriers.get(i).x + barriers.get(i).w;
+               x = loadedChunk.barriers.get(i).x + loadedChunk.barriers.get(i).w;
                velX = 0;
             }
             
             
             if (VELY > 0) {
-               y = barriers.get(i).y - h;
+               y = loadedChunk.barriers.get(i).y - h;
                velY = 0;
             }
             
             
             if (VELY < 0) {
-               y = barriers.get(i).y + barriers.get(i).h;
+               y = loadedChunk.barriers.get(i).y + loadedChunk.barriers.get(i).h;
                velY = 0;
             }
             
@@ -72,25 +72,25 @@ class Player {
    
    //collision with containers
    void collideWithContainer(float VELX, float VELY) {
-      for (int i = 0; i < containers.size(); i++) {
-         if (x > containers.get(i).x - w && x < containers.get(i).x + containers.get(i).w && y > containers.get(i).y - h && y < containers.get(i).y + containers.get(i).h) {
+      for (int i = 0; i < loadedChunk.containers.size(); i++) {
+         if (x > loadedChunk.containers.get(i).x - w && x < loadedChunk.containers.get(i).x + loadedChunk.containers.get(i).w && y > loadedChunk.containers.get(i).y - h && y < loadedChunk.containers.get(i).y + loadedChunk.containers.get(i).h) {
             if (VELX > 0) {
-               x = containers.get(i).x - w;
-               containers.get(i).velX = floor(velX);
+               x = loadedChunk.containers.get(i).x - w;
+               loadedChunk.containers.get(i).velX = floor(velX);
             } else
             if (VELX < 0) {
-               x = containers.get(i).x + containers.get(i).w;
-               containers.get(i).velX = ceil(velX);
+               x = loadedChunk.containers.get(i).x + loadedChunk.containers.get(i).w;
+               loadedChunk.containers.get(i).velX = ceil(velX);
             }
             
             
             if (VELY > 0) {
-               y = containers.get(i).y - h;
-               containers.get(i).velY = floor(velY);
+               y = loadedChunk.containers.get(i).y - h;
+               loadedChunk.containers.get(i).velY = floor(velY);
             } else
             if (VELY < 0) {
-               y = containers.get(i).y + containers.get(i).h;
-               containers.get(i).velY = ceil(velY);
+               y = loadedChunk.containers.get(i).y + loadedChunk.containers.get(i).h;
+               loadedChunk.containers.get(i).velY = ceil(velY);
             }
             
          }

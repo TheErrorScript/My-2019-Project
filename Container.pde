@@ -23,42 +23,41 @@ class Container {
    
    
    //the contents of the container
-   int[][] contents;
+   ArrayList<int[]> contents = new ArrayList<int[]>();
    
    
    //constructor
-   Container(int tempType, float tempX, float tempY/*, int[][] tempContents*/) {
+   Container(int tempType, float tempX, float tempY) {
       type = tempType;
       x = tempX;
       y = tempY;
-      //contents = tempContents;
    };
    
    
    //collision with barriers
    void collideWithBarrier(float VELX, float VELY) {
-      for (int i = 0; i < barriers.size(); i++) {
-         if (x > barriers.get(i).x - w && x < barriers.get(i).x + barriers.get(i).w && y > barriers.get(i).y - h && y < barriers.get(i).y + barriers.get(i).h) {
+      for (int i = 0; i < loadedChunk.barriers.size(); i++) {
+         if (x > loadedChunk.barriers.get(i).x - w && x < loadedChunk.barriers.get(i).x + loadedChunk.barriers.get(i).w && y > loadedChunk.barriers.get(i).y - h && y < loadedChunk.barriers.get(i).y + loadedChunk.barriers.get(i).h) {
             if (VELX > 0) {
-               x = barriers.get(i).x - w;
+               x = loadedChunk.barriers.get(i).x - w;
                velX = 0;
             }
             
             
             if (VELX < 0) {
-               x = barriers.get(i).x + barriers.get(i).w;
+               x = loadedChunk.barriers.get(i).x + loadedChunk.barriers.get(i).w;
                velX = 0;
             }
             
             
             if (VELY > 0) {
-               y = barriers.get(i).y - h;
+               y = loadedChunk.barriers.get(i).y - h;
                velY = 0;
             }
             
             
             if (VELY < 0) {
-               y = barriers.get(i).y + barriers.get(i).h;
+               y = loadedChunk.barriers.get(i).y + loadedChunk.barriers.get(i).h;
                velY = 0;
             }
             

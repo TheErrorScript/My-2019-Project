@@ -1,5 +1,8 @@
 /*
    Things to do:
+      
+      ***GET THE FILE SYSTEM WORKING***
+      
       Make some UIs for inventory
       Get the item things done
 
@@ -15,18 +18,145 @@ float altMils = 0;
 float frameDif = 0;
 
 
+//what save file?
+int saveNum = 1;
+
+
 //the player
 Player p1;
 
 
-boolean UIOpen = false;
+//loads the chunk that the player is in
+void loadChunk() {
+   //loop through the stored chunks
+   for (int i = 0; i < storedChunks.size(); i ++) {
+      //if the player is inside the chunk
+      if (storedChunks.get(i).x + 5000 > p1.x && storedChunks.get(i).x < p1.x + p1.w && storedChunks.get(i).y + 5000 > p1.y && storedChunks.get(i).y < p1.y + p1.h) {
+         
+         //if there is a chunk already loaded then...
+         if (loadedChunk != null) {
+            //...put it back into storage
+            storedChunks.add(loadedChunk);
+         }
+         
+         //load the selected chunk...
+         loadedChunk = storedChunks.get(i);
+         //...and remove it from storage
+         storedChunks.remove(i);
+         
+         //and then exit
+         return;
+      }
+   }
+};
 
 
-//ArrayList to store all the barriers
-ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+//the currently loaded chunk
+Chunk loadedChunk;
+//array list for all stored chunks
+ArrayList<Chunk> storedChunks = new ArrayList<Chunk>();
 
-//ArrayList to store all the containers IRONIC?
-ArrayList<Container> containers = new ArrayList<Container>();
+
+//function for unpacking data from saved files
+void loadSave() {
+   //load the file
+   JSONObject file = loadJSONObject(sketchPath() + "\\data\\save" + saveNum + ".json");
+   //get the "data" object
+   JSONObject data = file.getJSONObject("data");
+   
+   
+   //get the "chunks" array
+   JSONArray chunks = data.getJSONArray("chunks");
+   
+   //Loop through the chunks
+   for (int i = 0; i < chunks.size(); i++) {
+      //the currently selected chunk data
+      JSONObject current = chunks.getJSONObject(i);
+      
+      
+      //position of the chunk
+      JSONObject position = current.getJSONObject("position");
+      //x coord
+      float chunkX = position.getFloat("x");
+      //y coord
+      float chunkY = position.getFloat("y");
+      
+      
+      //Make the chunk
+      storedChunks.add(new Chunk(chunkX, chunkY));
+      
+      
+      //get the "blocks" array
+      JSONArray blocks = current.getJSONArray("blocks");
+      
+      
+      
+      //get the "barriers" array
+      JSONArray barriers = current.getJSONArray("barriers");
+      
+      for (int ba = 0; ba < barriers.size(); ba++) {
+         //the current selected barrier
+         JSONObject baCurrent = barriers.getJSONObject(ba);
+         
+         //get the values
+         //x
+         float baX = baCurrent.getFloat("x");
+         //y
+         float baY = baCurrent.getFloat("y");
+         //width
+         float baW = baCurrent.getFloat("w");
+         //height
+         float baH = baCurrent.getFloat("h");
+         
+         //import the data into the chunk
+         storedChunks.get(i).barriers.add(new Barrier(baX, baY, baW, baH));
+      }
+      
+      
+      
+      //get the "containers" array
+      JSONArray containers = current.getJSONArray("containers");
+      
+      for (int co = 0; co < containers.size(); co++) {
+         JSONObject coCurrent = containers.getJSONObject(co);
+         
+         int coType = coCurrent.getInt("type");
+         float coX = coCurrent.getFloat("x");
+         float coY = coCurrent.getFloat("y");
+         
+         storedChunks.get(i).containers.add(new Container(coType, coX, coY));
+         
+         /*JSONArray contents = coCurrent.getJSONArray("contents");
+         
+         
+         for (int j = 0; j < contents.size(); j++) {
+            int[] tempArr = {};
+            
+            JSONArray arrCurrent = contents.getJSONArray(j);
+            
+            for (int n = 0; n < arrCurrent.size(); n++) {
+               int curNum = arrCurrent.getInt(n);
+               tempArr = splice(tempArr, n, curNum);
+               
+            }
+            
+            
+         storedChunks.get(i).containers.get(j).contents.add(tempArr);
+            
+         }*/
+         
+         
+      }
+      
+      
+      
+   }
+   
+   //load the chunk the player is in
+   loadChunk();
+   
+};
+
 
 
 //how far the is translated
@@ -53,78 +183,57 @@ void setup() {
    size(1200, 700);
    
    
-   if (devMode) {
-      p1 = new Player(0, 0);
-      barriers.add(new Barrier(250, 250, 80, 80));
-      containers.add(new Container(0, 500, 250));
-   }
-   
+   p1 = new Player(0, 0);
    
 };
 
 
 void draw() {
    
+   if (frameCount == 1) {
+      loadSave();
+   }
    
-   //developer mode
+   background(0);
+   
+   //change how far the screen is translated depending on the mouse and the player's coords
+   //x direction
+   screenTransX = (width/2 - (p1.w/2)) - p1.x - ((-width/2 + mouseX)/2);
+   //y direction
+   screenTransY = (height/2 - (p1.h/2)) - p1.y - ((-height/2 + mouseY)/2);
+   
+   //a translated mouse position depending on the screen translation
+   //x coord
+   aMouseX = -screenTransX + mouseX;
+   //y coord
+   aMouseY = -screenTransY + mouseY;
+   
+   
+   pushMatrix();
+   translate(screenTransX, screenTransY);
+   
+   stroke(255);
+   line(-100, 0, 100, 0);
+   line(0, -100, 0, 100);
+   
+   
+   //show the currently loaded chunk
+   loadedChunk.show();
+   
+   
+   //drawing the player
+   p1.show();
+   
+   
+   //the translated mouse
+   noStroke();
+   fill(255);
+   ellipse(aMouseX, aMouseY, 10, 10);
+   
+   
+   popMatrix();
+   
    if (devMode) {
-      background(0);
-      
-      //change how far the screen is translated depending on the mouse and the player's coords
-      //x direction
-      screenTransX = (width/2 - (p1.w/2)) - p1.x - ((-width/2 + mouseX)/2);
-      //y direction
-      screenTransY = (height/2 - (p1.h/2)) - p1.y - ((-height/2 + mouseY)/2);
-      
-      //a translated mouse position depending on the screen translation
-      //x coord
-      aMouseX = -screenTransX + mouseX;
-      //y coord
-      aMouseY = -screenTransY + mouseY;
-      
-      
-      pushMatrix();
-      translate(screenTransX, screenTransY);
-      
-      stroke(255);
-      line(-100, 0, 100, 0);
-      line(0, -100, 0, 100);
-      
-      
-      //drawing barriers witch are usually invisible
-      for (int i = 0; i < barriers.size(); i++) {
-         noFill();
-         stroke(255, 0, 0);
-         
-         rect(barriers.get(i).x, barriers.get(i).y, barriers.get(i).w, barriers.get(i).h);
-         
-         textAlign(CENTER, CENTER);
-         textSize(10);
-         
-         fill(255, 0, 0);
-         text("Barrier", barriers.get(i).x + (barriers.get(i).w/2), barriers.get(i).y - 15);
-      }
-      
-      
-      //show the containers
-      for (int i = 0; i < containers.size(); i++) {
-         containers.get(i).show();
-      }
-      
-      
-      //drawing the player
-      p1.show();
-      
-      
-      //the translated mouse
-      noStroke();
-      fill(255);
-      ellipse(aMouseX, aMouseY, 10, 10);
-      
-      
-      popMatrix();
-      
-      
       textAlign(LEFT, BOTTOM);
       textSize(15);
       
@@ -134,7 +243,7 @@ void draw() {
       text("Keys Pressed: W " + keys[0] + ", A " + keys[1] + ", S " + keys[2] + ", D " + keys[3], 5, 60);
       
       
-      //some simple math to detrmine the FPS
+      //some simple math to determine the FPS
       altMils = mils;
       mils = millis();
       frameDif = mils - altMils;
@@ -144,21 +253,7 @@ void draw() {
       }
       
       text("FPS: " + fps, 5, 80);
-      
    }
-   
-   
-   //not dev mode
-   else {
-   
-   
-   }
-   
-   
-   if (UIOpen) {
-   
-   }
-   
    
 };
 
